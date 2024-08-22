@@ -1,0 +1,43 @@
+# 项目全局配置
+
+
+# 链接的设备名或ip端口
+#device: adb-24ed1083-yGX7n1._adb-tls-connect._tcp.
+device: 24ed1083
+
+# 当前的角色
+cur_role: axiulou
+attack_distance: 600 # 攻击距离一般600够了
+
+# 支持的所有角色，配置对应的配置文件路径
+role_config:
+  # 剑魂
+  - role_name: jianhun
+    path: jianhun.yaml
+  # 阿修罗
+  - role_name: axiulou
+    path: axiulou.yaml
+  # 红眼
+  - role_name: hongyan
+    path: hongyan.yaml
+
+
+# 技能与方向坐标点配置
+coordinates:
+  wheel_center: [460, 850] # 方向轮盘的中心点
+  wheel_radius: 125 # 方向轮盘的半径 比实际的半径要小一点
+  attack: [1962, 910] # 攻击按钮的坐标
+  skill_d: [1338, 975] # 底部左边两个技能 d f
+  skill_f: [1495, 973]
+  skill_1: [1645, 969] # 按照王者的技能顺序 1 2 3 4 5
+  skill_2: [1695, 810]
+  skill_3: [1825, 672]
+  skill_4: [1988, 640]
+  skill_5: [1982, 488]
+  skill_t: [1792, 985] # 后跳技能
+  skill_y: [2018, 780] # 原地跳技能
+  skill_q: [1665, 348] # 上方4个技能 q w e r
+  skill_w: [1774, 348]
+  skill_e: [1870, 348]
+  skill_r: [1979, 348]
+  skill_swip_center: [1812, 518] # 滑动技能的中心点

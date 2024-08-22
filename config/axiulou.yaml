@@ -1,0 +1,154 @@
+# 不同角色配置不同的技能连招
+
+# 角色名字
+role_name: 阿修罗
+
+
+# 技能配置列表
+# 配置说明：
+#  1. skill_name表示技能的名字，time表示技能的持续时间，wait表示技能之间的间隔时间
+#  2. skill_name=move时 表示移动的方法，param表示移动的方法有两个参数：角度、移动时间，使用param
+#  3. skill_name=attack时 表示攻击的方法，time表示攻击次数
+
+# buff技能配置,需要频繁释放的技能
+buff_skills:
+#  - skill_name: skill_up
+
+
+
+
+# 状态技能[只需要开启一次的技能]配置
+state_skills:
+  - skill_name: skill_right
+  # 使用默认持续时间，所以不需要time
+
+
+
+# 觉醒技能释放配置
+unique_skills:
+  - skill_name: move
+    param: [ 265, 0.4 ] # 移动的方法有两个参数，使用param
+  - skill_name: skill_r
+    time: 0.5 # 技能的持续时间 也就是按住不松开的时间
+  - skill_name: skill_r
+  - skill_name: move
+    param: [10, 0.1] # 移动的方法有两个参数：角度、移动时间，使用param
+  - skill_name: skill_t
+  - skill_name: skill_t
+  - skill_name: skill_4
+  - skill_name: skill_4
+
+# 房间技能配置
+room_skills:
+  - - room_ij: [ 1, 1 ]
+    - skill_name: skill_w
+      wait: 1
+    - skill_name: attack
+      time: 3
+  - - room_ij: [ 1, 0 ]
+    - skill_name: skill_w
+      wait: 1
+    - skill_name: attack
+      time: 3
+  - - room_ij: [ 1, 2 ]
+    - skill_name: skill_1
+      wait: 0.2
+    - skill_name: skill_d
+
+
+  - - room_ij: [ 1, 3 ]
+    - skill_name: skill_5
+    - skill_name: skill_5
+    - skill_name: skill_e
+      wait: 0.5
+    - skill_name: attack
+      time: 2
+  - - room_ij: [ 1, 5 ]
+    - skill_name: skill_2
+      wait: 0.5
+    - skill_name: move
+      param: [ 0, 0.5 ]
+    - skill_name: skill_4
+      wait: 1
+    - skill_name: attack
+      time: 2
+
+# 伤害技能配置
+hurt_skills:
+  - - skill_name: skill_q
+      time: 0.1
+    - skill_name: skill_w
+    - skill_name: skill_1
+    - skill_name: attack
+      time: 3 # 当是attack时，time表示攻击次数3次
+    - skill_name: skill_1
+    - skill_name: attack
+    - skill_name: skill_1
+      wait: 0.2
+    - skill_name: attack
+
+
+  -
+    - skill_name: skill_2
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_2
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_2
+    - skill_name: attack
+    - skill_name: skill_2
+    - skill_name: attack
+
+  - - skill_name: skill_q
+      time: 0.1
+    - skill_name: skill_d
+    - skill_name: attack
+      time: 2
+    - skill_name: skill_3
+      wait: 0.2
+    - skill_name: skill_3
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_w
+    - skill_name: attack
+
+  - - skill_name: skill_q
+      time: 0.1
+    - skill_name: skill_4
+      wait: 0.5
+    - skill_name: skill_y
+    - skill_name: skill_y
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_4
+    - skill_name: attack
+      time: 3
+
+  - - skill_name: skill_q
+      time: 0.1
+    - skill_name: skill_5
+      wait: 0.2
+    - skill_name: skill_5
+    - skill_name: attack
+    - skill_name: skill_5
+    - skill_name: skill_e
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_f
+    - skill_name: attack
+      time: 3
+
+  -
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_up
+      wait: 0.1
+    - skill_name: skill_down
+      wait: 0.1
+    - skill_name: skill_left
+    - skill_name: attack
+      time: 3
+    - skill_name: skill_f
+    - skill_name: attack
+      time: 3

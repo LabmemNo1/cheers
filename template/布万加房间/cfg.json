@@ -1,0 +1,14 @@
+[
+  {"rect": [1202, 62, 32, 32], "name": [1,1], "img_name": "img.png", "desc": "当前在布万加-狮子头房间"},
+  {"rect": [1240, 62, 32, 32], "name": [1,0], "img_name": "img1.png", "desc": "正在1行0列房间"},
+  {"rect": [1240, 62, 32, 32], "name": [2,0], "img_name": "img2.png", "desc": "正在2行0列房间"},
+  {"rect": [1202, 62, 32, 32], "name": [2,1], "img_name": "img3.png", "desc": "正在2行1列房间"},
+  {"rect": [1240, 62, 32, 32], "name": [2,2], "img_name": "img4.png", "desc": "正在2行2列房间"},
+  {"rect": [1239, 93, 44, 44], "name": [1,2], "img_name": "img5.png", "desc": "正在1行2列房间"},
+  {"rect": [1203, 62, 32, 32], "name": [1,3], "img_name": "img6.png", "desc": "正在1行3列房间"},
+  {"rect": [1273, 62, 32, 32], "name": [1,4], "img_name": "img7.png", "desc": "正在1行4列房间"},
+  {"rect": [1240, 62, 32, 32], "name": [1,5], "img_name": "img8.png", "desc": "正在1行5列房间"},
+  {"rect": [1240, 62, 32, 32], "name": [0,2], "img_name": "img9.png", "desc": "同理"},
+  {"rect": [1203, 93, 32, 32], "name": [0,1], "img_name": "img10.png", "desc": "同理"},
+  {"rect": [1240, 93, 32, 32], "name": [0,0], "img_name": "img10.png", "desc": "同理"}
+]
