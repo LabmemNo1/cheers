@@ -6,6 +6,7 @@ from typing import Tuple
 from game.attack.attack_master import AttackMaster
 from utils import room_calutil
 from utils.cvmatch import image_match_util
+from utils.template_util import TemplateUtil
 from utils.yolov5 import YoloV5s
 from game.game_control import GameControl
 from adb.scrcpy_adb import ScrcpyADB
@@ -82,15 +83,9 @@ class GameAction:
         self.ctrl = ctrl
         self.global_cfg = ctrl.adb.global_cfg
         self.param = GameParamVO()
-        self.attack = AttackMaster(ctrl, self.param)
+        self.attack = AttackMaster(ctrl)
         self.yolo = self.ctrl.adb.yolo
         self.adb = self.ctrl.adb
-        # 获取当前工作目录的父目录
-        parent_directory = os.path.abspath(os.path.join(os.path.abspath(__file__), os.pardir, os.pardir))
-        # 再次挑战
-        self.again_button_img = cv.imread(f'{parent_directory}/template/again_button.jpg')
-        # 修理装备
-        self.repair_equipment = cv.imread(f'{parent_directory}/template/repair_equipment.png')
 
     def find_result(self):
         while True:
@@ -199,13 +194,13 @@ class GameAction:
                 # route_id, cur_room, point = self.get_cur_room_index()
                 flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
                 if flag is False:
-                    route_id, cur_room = self.get_cur_room_index()
+                    route_id, cur_room, point = self.get_cur_room_index()
                 if cur_room is None:
                     print('没有找到地图和当前房间')
                     return result
-                next_route_id, next_room = room_calutil.get_next_room(cur_room, self.param.is_succ_sztroom)
-                if next_room is None:
-                    next_room = room_calutil.get_recent_room(cur_room)
+                _, next_room = room_calutil.get_next_room(cur_room, self.param.is_succ_sztroom)
+                # if next_room is None:
+                #     next_room = room_calutil.get_recent_room(cur_room)
                 if next_room is None:
                     print('没有找到下一个房间')
                     return result
@@ -291,15 +286,25 @@ class GameAction:
         # self.ctrl.click(sx, sy, 0.1)
         self.move_to_xy(sx, sy)
 
-
-    def no_hero_handle(self,result=None, mov_time = 0.3):
+    def no_hero_handle(self, result=None, mov_time = 0.3):
         """
         找不到英雄或卡墙了，随机移动，攻击几下
         :param result:
         :param t:
         :return:
         """
-        angle = (self.param.next_angle % 4) * 90 + random.randrange(start=-15, stop=15)
+        if result is not None and self.find_one_tag(result, 'hero') is not None:
+            win_w, win_h = self.adb.window_size
+            hero = self.find_one_tag(result, 'hero')
+            hx, hy = get_detect_obj_bottom(hero)
+            if hx < win_w/5:
+                angle = 0
+            elif hx > 4*win_w/5:
+                angle = 180
+            else:
+                angle = (self.param.next_angle % 4) * 90 + random.randrange(start=-15, stop=15)
+        else:
+            angle = (self.param.next_angle % 4) * 90 + random.randrange(start=-15, stop=15)
         print(f'正在随机移动。。。随机角度移动{angle}度。')
         self.param.next_angle = (self.param.next_angle + 1) % 4
         sx, sy = self.ctrl.calc_mov_point(angle)
@@ -308,7 +313,7 @@ class GameAction:
         self.move_to_xy(sx, sy)
         time.sleep(mov_time)
 
-    def move_to_xy(self, x, y, out_time=2):
+    def move_to_xy(self, x, y, out_time=3):
         """
         移动到指定位置,默认2秒超时
         :param x:
@@ -340,6 +345,7 @@ class GameAction:
         # 检查装备的次数
         check_cnt = 0
         hero_no = 0
+        start_pick = time.time()
         while True:
             screen, result = self.find_result()
 
@@ -365,6 +371,10 @@ class GameAction:
             if len(equipment) > 0:
                 print('找到装备数量：', len(equipment))
                 self.move_to_target(equipment, hero, hx, hy, screen)
+                if time.time() - start_pick > 3:
+                    print('捡装备，超过3秒，随机移动。。。')
+                    self.no_hero_handle(mov_time=1)
+                    start_pick = time.time()
 
             else:
                 # 没有装备就跳出去
@@ -391,10 +401,11 @@ class GameAction:
         mov_to_master_start = time.time()
         attack_distance = self.global_cfg.get_by_key('attack_distance')
         attack_distance = attack_distance if attack_distance is None else 600
+        room_skill_flag = True
         while True:
             # 找到牌子
             screen, result = self.find_result()
-            card = self.find_tag(result, ['card'])
+            card = self.find_tag(result, ['card','go','opendoor_l','opendoor_r','opendoor_u','op'])
             if len(card) > 0:
                 print('找到翻牌的卡片，不攻击')
                 return
@@ -418,6 +429,12 @@ class GameAction:
             if len(monster) > 0:
                 check_cnt=0
                 print('怪物数量：', len(monster))
+                if room_skill_flag:
+                    room_skill_flag = False
+                    # 先来一套固定技能，然后在随机打
+                    print(f'开始释放房间{self.param.cur_room}的固定技能。。。')
+                    self.attack.room_skill(self.param.cur_room)
+
                 # 最近距离的怪物坐标
                 nearest_monster = min(monster, key=lambda a: distance_detect_object(hero, a))
                 distance = distance_detect_object(hero, nearest_monster)
@@ -431,8 +448,7 @@ class GameAction:
                     # 狮子头房间放觉醒
                     self.attack.unique_skill()
                     continue
-                # 先来一套固定技能，然后在随机打
-                self.attack.room_skill(self.param.cur_room)
+
                 if distance <= attack_distance * ratio and y_dis <= 100*ratio:
                     # 面向敌人
                     angle = calc_angle(hx, hy, ax, hy)
@@ -545,39 +561,33 @@ class GameAction:
             if self.param.cur_room != (1, 5) and self.param.cur_room != (1, 4):
                 return
             screen, result = self.find_result()
-            if len(self.find_tag(result, 'equipment')) > 0:
+            if len(self.find_tag(result, ['equipment','Monster', 'Monster_ds', 'Monster_szt'])) > 0:
                 return
 
-            h, w = screen.shape[:2]
+            template_util = TemplateUtil()
             # 发现修理装备，就修理
-            crop = (int(w*0.79452), int(h*0.28519), int(w*0.13013), int(w*0.13013))
-            # crop = (1856, 308, 304, 304)
-            # crop = tuple(int(value * room_calutil.zoom_ratio) for value in crop)
-            repair_res = image_match_util.match_template_best(self.repair_equipment, self.ctrl.adb.last_screen, crop)
+            screen = self.ctrl.adb.last_screen
+            repair_res = template_util.find_template('修理装备',screen)
             if repair_res is not None:
                 print('发现修理装备按钮,点击修理装备')
-                x, y, w, h = repair_res['rect']
-                self.ctrl.click((x + w / 2) / self.ctrl.adb.zoom_ratio, (y + h / 2) / self.ctrl.adb.zoom_ratio)
+                # x, y, w, h = repair_res['rect']
+                self.ctrl.click(repair_res[0] / self.ctrl.adb.zoom_ratio, repair_res[1] / self.ctrl.adb.zoom_ratio)
                 time.sleep(0.8)
                 # 点击修理
                 self.ctrl.click(1056, 950)
                 time.sleep(0.8)
-                self.ctrl.click((x + w / 2) / self.ctrl.adb.zoom_ratio, (y + h / 2) / self.ctrl.adb.zoom_ratio)
+                self.ctrl.click(repair_res[0] / self.ctrl.adb.zoom_ratio, repair_res[1] / self.ctrl.adb.zoom_ratio)
                 time.sleep(0.2)
 
-            # 截取区域 xywh
-            crop = (int(w * 0.79452), int(h * 0.16875), int(w * 0.13013), int(w * 0.13013))
-            # crop = (1856, 108, 304, 304)
-            # crop = tuple(int(value * room_calutil.zoom_ratio) for value in crop)
-            # 模版匹配再次挑战按钮
-            result = image_match_util.match_template_best(self.again_button_img, self.ctrl.adb.last_screen, crop)
-            if result is None or result['confidence'] < 0.7:
+            # 截取区域 xywh，在电脑用截图工具拿到
+            again_btn = template_util.find_template('再次挑战地下城',screen)
+            if again_btn is None:
                 return
 
             # 发现了再次挑战，就重开
             print('发现再次挑战按钮,点击重开')
-            x, y, w, h = result['rect']
-            self.ctrl.click((x + w / 2) / self.ctrl.adb.zoom_ratio, (y + h / 2) / self.ctrl.adb.zoom_ratio)
+            # x, y, w, h = result['rect'] #{'confidence': 0.748958170413971, 'rect': (1129, 129, 128, 24)}
+            self.ctrl.click(again_btn[0] / self.ctrl.adb.zoom_ratio, again_btn[1] / self.ctrl.adb.zoom_ratio)
             print('成功点击再次挑战按钮')
             time.sleep(0.8)
             self.ctrl.click(1304, 691)
@@ -586,6 +596,11 @@ class GameAction:
 
         except Exception as e:
             print('没有找到再次挑战按钮:', e)
+
+
+    def test(self):
+        print(f'开始释放房间{self.param.cur_room}的固定技能。。。')
+        self.attack.room_skill(self.param.cur_room)
 
 
 def run():
@@ -620,24 +635,27 @@ def run():
         time.sleep(0.1)
 
 
-# def test():
-#     ctrl = GameControl(ScrcpyADB(1384))
-#     action = GameAction(ctrl)
-#
-#     while True:
-#         try:
-#             action.find_result()
-#             print('--------------------------------发现怪物，开始攻击--------------------------------')
-#             cv.imwrite('test.jpg', action.adb.last_screen)
-#             res = room_calutil.find_cur_room(action.adb.last_screen)
-#             print(res)
-#             time.sleep(1)
-#             print('--------------------------------结束攻击--------------------------------')
-#
-#         except Exception as e:
-#             action.param.mov_start = False
-#             print(f'出现异常:{e}')
-#             traceback.print_exc()
+def test():
+    ctrl = GameControl(ScrcpyADB(1384))
+    action = GameAction(ctrl)
+
+    while True:
+        try:
+            action.find_result()
+            print('--------------------------------test start--------------------------------')
+            cv.imwrite('test.jpg', action.adb.last_screen)
+            res = room_calutil.find_cur_room(action.adb.last_screen)
+            action.param.cur_room = res[1]
+            action.test()
+
+            print(res)
+            time.sleep(1)
+            print('--------------------------------test end--------------------------------')
+
+        except Exception as e:
+            action.param.mov_start = False
+            print(f'出现异常:{e}')
+            traceback.print_exc()
 
 
 

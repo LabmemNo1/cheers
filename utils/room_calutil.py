@@ -8,6 +8,7 @@ from torch import Size
 from typing import Tuple
 
 from utils.cvmatch import image_match_util
+from utils.template_util import TemplateUtil
 
 # 走的房间路线顺序路线图,第几行第几列
 room_route = [
@@ -109,6 +110,16 @@ def get_next_room(cur_room, is_succ_sztroom: bool = False):
     if is_succ_sztroom and ind == 4:
         ind = 6
 
+    if ind is None:
+        print("从预设的路线中，没有找到下一个房间")
+        # 错误房间就三个，分别枚举算了
+        if cur_room == (0, 0):
+            return None, (1,0)
+        if cur_room == (0, 1):
+            return None, (0, 2)
+        if cur_room == (0, 2):
+            return None, (1, 2)
+        return None, None
     # 狮子头房间刷过了，不用去了
     if is_succ_sztroom and cur_room == (1, 2):
         return 7, (1, 3)
@@ -157,11 +168,10 @@ def get_tag_by_direction(direction):
         return 'opendoor_r'
 
 
-parent_directory = os.path.abspath(os.path.join(os.path.abspath(__file__), os.pardir, os.pardir))
-with open(f'{parent_directory}/template/布万加房间/cfg.json', 'r',encoding='utf-8') as file:
-    cfgs = json.load(file)
-img_names = list(filter(lambda x: x.endswith('.png'), os.listdir(f'{parent_directory}/template/布万加房间')))
-img_map = {item: cv2.imread(f'{parent_directory}/template/布万加房间/{item}') for item in img_names}
+# 加载布万加的地图模板
+map_template = TemplateUtil().load_template()
+img_map = map_template.img_map
+cfgs = map_template.cfgs
 
 
 def find_cur_room(screen, confi=0.7):
@@ -186,7 +196,6 @@ def find_cur_room(screen, confi=0.7):
                 if res['confidence'] > confidence:
                     confidence = res['confidence']
                     room = tuple(cfg['name'])
-                    # print(confidence,room)
                     flag = True
     print(f'匹配房间结果：{flag},房间行列号:{room}')
     return flag, room

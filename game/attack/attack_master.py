@@ -67,7 +67,7 @@ class AttackMaster():
         # self.release_skill("room_skills")
         self.release_skill("hurt_skills")
 
-    def is_ready(self, skill: str):
+    def is_ready(self, skill: str,last_screen):
         """
         看技能是否准备好，冷却完成
         :param skill: 技能名称
@@ -89,7 +89,6 @@ class AttackMaster():
             skill_position[1] + offset)
 
         # 读取屏幕截图中的技能图标区域
-        last_screen = self.ctrl.adb.last_screen
         skill_icon = last_screen[crop[1]:crop[3], crop[0]:crop[2]]
         # 将图标转换为灰度图像
         gray_icon = cv2.cvtColor(skill_icon, cv2.COLOR_BGR2GRAY)
@@ -129,11 +128,13 @@ class AttackMaster():
         self.do_skills(buff_skills)
 
     def do_skills(self, buff_skills,if_vaild=True):
+        # 在同一画面校验是否cd
+        last_screen = self.ctrl.adb.last_screen
         for skill in buff_skills:
             try:
                 skill_name = get_by_key(skill, 'skill_name')
                 # 技能还在冷却，则跳过
-                if if_vaild and not self.is_ready(skill_name):
+                if if_vaild and not self.is_ready(skill_name,last_screen):
                     continue
                 # 释放技能
                 skill_method = getattr(self.ctrl, skill_name)
@@ -161,13 +162,17 @@ class AttackMaster():
         # self.release_skill("room_skills")
         # elif skill_type == "room_skills":
         buff_skills = get_by_key(self.role_yaml, 'room_skills')
+        if buff_skills is None:
+            print(f'...所有房间技能未配置...')
+            return
         for skill in buff_skills:
             room = get_by_key(skill, 0,'room_ij')
             if cur_room == tuple(room):
                 print(f'...正在释放【{cur_room}】房间技能...')
                 buff_skills = skill[1:]
-                self.do_skills(buff_skills,False)
+                self.do_skills(buff_skills)
                 return
+        print(f'...【{cur_room}】房间技能未配置...')
 
 
 

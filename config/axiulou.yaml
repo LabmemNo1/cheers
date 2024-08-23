@@ -40,34 +40,69 @@ unique_skills:
 
 # 房间技能配置
 room_skills:
-  - - room_ij: [ 1, 1 ]
-    - skill_name: skill_w
-      wait: 1
-    - skill_name: attack
-      time: 3
   - - room_ij: [ 1, 0 ]
+    - { skill_name: move, param: [ 0, 0.3 ] }
+    - { skill_name: skill_3, time: 0.8 }
+    - { skill_name: attack, time: 2 }
+
+  - - room_ij: [ 2, 0 ]
+    - skill_name: move
+      param: [ 290, 0.5 ]
+    - skill_name: skill_4
+      wait: 0.5
+    - skill_name: skill_q
+      time: 1
+    - skill_name: attack
+
+
+  - - room_ij: [ 2, 1 ]
+    - skill_name: skill_f
+      wait: 0.1
+    - skill_name: move
+      param: [ 0, 0.5 ]
+      wait: 0.1
+    - skill_name: skill_d
+      wait: 0.1
+    - skill_name: attack
+
+  - - room_ij: [ 2, 2 ]
+    - skill_name: move
+      param: [ 0, 0.7 ]
+    - skill_name: skill_e
+      wait: 1
+    - skill_name: attack
+      time: 3
+
+
+  - - room_ij: [ 1, 2 ]
+    - skill_name: move
+      param: [ 90, 0.5 ]
+    - skill_name: skill_3
+      wait: 0.5
+    - skill_name: attack
     - skill_name: skill_w
       wait: 1
     - skill_name: attack
       time: 3
-  - - room_ij: [ 1, 2 ]
-    - skill_name: skill_1
-      wait: 0.2
-    - skill_name: skill_d
 
 
   - - room_ij: [ 1, 3 ]
     - skill_name: skill_5
+      wait: 0.2
     - skill_name: skill_5
+      wait: 0.2
+    - skill_name: skill_5
+      wait: 0.1
     - skill_name: skill_e
       wait: 0.5
     - skill_name: attack
       time: 2
+
   - - room_ij: [ 1, 5 ]
-    - skill_name: skill_2
-      wait: 0.5
     - skill_name: move
       param: [ 0, 0.5 ]
+    - skill_name: skill_2
+      wait: 0.5
     - skill_name: skill_4
       wait: 1
     - skill_name: attack
@@ -75,80 +110,51 @@ room_skills:
 
 # 伤害技能配置
 hurt_skills:
-  - - skill_name: skill_q
-      time: 0.1
-    - skill_name: skill_w
-    - skill_name: skill_1
-    - skill_name: attack
-      time: 3 # 当是attack时，time表示攻击次数3次
-    - skill_name: skill_1
-    - skill_name: attack
-    - skill_name: skill_1
-      wait: 0.2
-    - skill_name: attack
+  - - { skill_name: skill_q, time: 0.5 }
+    - { skill_name: attack, time: 3 }
+
+  - - { skill_name: skill_left, time: 0.1 }
+    - { skill_name: attack, time: 3 }
+
+  - - { skill_name: skill_2, time: 0.1 }
+    - { skill_name: attack, time: 3 }
+
+  - - { skill_name: skill_q, time: 0.5 }
+    - { skill_name: skill_1, wait: 0.1 }
+    - { skill_name: skill_1, wait: 0.1 }
+    - { skill_name: skill_1, wait: 0.1 }
+    - { skill_name: attack, time: 2 }
 
 
-  -
-    - skill_name: skill_2
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_2
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_2
-    - skill_name: attack
-    - skill_name: skill_2
-    - skill_name: attack
+  - - { skill_name: skill_down, time: 0.1 }
+    - { skill_name: attack, time: 3 }
 
-  - - skill_name: skill_q
-      time: 0.1
-    - skill_name: skill_d
-    - skill_name: attack
-      time: 2
-    - skill_name: skill_3
-      wait: 0.2
-    - skill_name: skill_3
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_w
-    - skill_name: attack
+  - - { skill_name: skill_up, time: 0.1 }
+    - { skill_name: attack, time: 3 }
 
-  - - skill_name: skill_q
-      time: 0.1
-    - skill_name: skill_4
-      wait: 0.5
-    - skill_name: skill_y
-    - skill_name: skill_y
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_4
-    - skill_name: attack
-      time: 3
 
-  - - skill_name: skill_q
-      time: 0.1
-    - skill_name: skill_5
-      wait: 0.2
-    - skill_name: skill_5
-    - skill_name: attack
-    - skill_name: skill_5
-    - skill_name: skill_e
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_f
-    - skill_name: attack
-      time: 3
+  - - { skill_name: skill_q, time: 0.5 }
+    - { skill_name: skill_left, time: 0.1}
+    - { skill_name: attack, time: 3 }
 
-  -
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_up
-      wait: 0.1
-    - skill_name: skill_down
-      wait: 0.1
-    - skill_name: skill_left
-    - skill_name: attack
-      time: 3
-    - skill_name: skill_f
-    - skill_name: attack
-      time: 3
+  - - { skill_name: skill_d, time: 0.1 }
+    - { skill_name: attack, time: 3 }
+
+
+  - - { skill_name: skill_4, time: 0.1 }
+    - { skill_name: skill_f, time: 0.1 }
+    - { skill_name: attack, time: 3 }
+
+  - - { skill_name: skill_e, wait: 0.1 }
+    - { skill_name: attack, time: 3 }
+
+
+  - - { skill_name: skill_1, wait: 0.1 }
+    - { skill_name: skill_3, wait: 0.1 }
+    - { skill_name: attack}
+    - { skill_name: skill_w, wait: 0.1 }
+
+
+  - - { skill_name: skill_1, time: 0.1 }
+    - { skill_name: skill_3, time: 0.1 }
+    - { skill_name: skill_w, time: 0.1 }

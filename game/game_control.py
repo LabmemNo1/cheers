@@ -44,8 +44,11 @@ class GameControl:
     def attack(self, cnt: int = 1):
         x, y = self.cfg.get_by_key('coordinates', 'attack')
         for i in range(cnt):
-            time.sleep(0.2)
-            t = random.randint(200, 800)/1000
+            # 点的太快可能被检测，做一点随机
+            if i > 0:
+                t = random.randint(50, 100)/1000
+                time.sleep(t)
+            t = random.randint(50, 100) / 1000
             self.click(x, y, t)
 
 

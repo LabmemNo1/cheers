@@ -556,7 +556,7 @@ def cvmatch_template_best(im_search, im_source, *crop):
         :return:
     """
     try:
-        m_w, m_h = im_search.shape[:2]
+        m_h, m_w = im_search.shape[:2]
         # 截取im_source的指定坐标范围部分来匹配
         x, y, w, h = 0, 0, im_source.shape[1], im_source.shape[0]
         if len(crop) > 0:

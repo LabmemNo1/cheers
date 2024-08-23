@@ -29,6 +29,7 @@ class ScrcpyADB:
         self.last_screen = None
         self.draw_screem = None
         self.result = None
+        self.window_size = (0, 0)  # 窗口大小 宽高 w,h
         client.add_listener(scrcpy.EVENT_FRAME, self.on_frame)
         client.start(threaded=True)
         self.client = client
@@ -42,10 +43,12 @@ class ScrcpyADB:
 
             s = time.time()
             result = self.yolo(screen)
-            # print(f'匹配耗时{int((time.time() - s) * 1000)} ms')
+            print(f'匹配耗时{int((time.time() - s) * 1000)} ms')
             self.draw_image(screen, result)
             self.result = result
             self.draw_screem = screen
+            if self.window_size == (0, 0):
+                self.window_size = sadb.last_screen.shape[1], sadb.last_screen.shape[0]
 
     def draw_image(self, screen, result):
         if screen is None:
