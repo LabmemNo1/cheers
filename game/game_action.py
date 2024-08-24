@@ -457,6 +457,7 @@ class GameAction:
                     sx, sy = self.ctrl.calc_mov_point(angle)
                     self.param.mov_start = False
                     self.move_to_xy(sx, sy)
+                    time.sleep(0.2)
                     # self.ctrl.move(angle, 0.3)
                     print(f'====================敌人与我的角度{angle}==攻击怪物，攻击次数：{attak_cnt}，当前房间,{self.param.cur_room}')
                     attak_cnt += 1
@@ -535,14 +536,15 @@ class GameAction:
             card = self.find_tag(result, 'card')
             select = self.find_tag(result, 'select')
             start = self.find_tag(result, 'start')
-            if len(select) > 0:
+
+            if len(start) > 0:
+                time.sleep(0.5)
+                self.ctrl.click(1889, 917)
+                return
+            elif len(select) > 0:
                 self.ctrl.click(294,313)
                 time.sleep(0.5)
                 self.ctrl.click(1640,834)
-                return
-            elif len(start) > 0:
-                time.sleep(0.5)
-                self.ctrl.click(1889, 917)
                 return
             elif len(card) > 0:
                 print('打完了，去翻牌子')
@@ -646,7 +648,7 @@ def test():
         try:
             action.find_result()
             print('--------------------------------test start--------------------------------')
-            cv.imwrite('test.jpg', action.adb.last_screen)
+            cv.imwrite('../test.jpg', action.adb.last_screen)
             res = room_calutil.find_cur_room(action.adb.last_screen)
             action.param.cur_room = res[1]
             action.test()
