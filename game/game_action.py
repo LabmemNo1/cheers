@@ -86,6 +86,8 @@ class GameAction:
         self.attack = AttackMaster(ctrl)
         self.yolo = self.ctrl.adb.yolo
         self.adb = self.ctrl.adb
+        # todo 稳定后可根据配置加载不同地图
+        room_calutil.load_map_template('布万加房间')
 
     def find_result(self):
         while True:
@@ -564,6 +566,7 @@ class GameAction:
             if len(self.find_tag(result, ['equipment','Monster', 'Monster_ds', 'Monster_szt'])) > 0:
                 return
 
+            # 初始化找模版工具
             template_util = TemplateUtil()
             # 发现修理装备，就修理
             screen = self.ctrl.adb.last_screen

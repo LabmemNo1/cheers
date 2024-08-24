@@ -167,11 +167,23 @@ def get_tag_by_direction(direction):
     elif direction == 'right':
         return 'opendoor_r'
 
-
-# 加载布万加的地图模板
-map_template = TemplateUtil().load_template()
-img_map = map_template.img_map
-cfgs = map_template.cfgs
+# 定义模块级别的变量
+_img_map = None
+_cfgs = None
+def load_map_template(map_name='布万加房间'):
+    """
+    加载布万加的地图模板
+    :return:
+    """
+    try:
+        global _img_map, _cfgs  # 声明使用模块级别的变量
+        # 加载布万加的地图模板
+        map_template = TemplateUtil().load_template(map_name)
+        _img_map = map_template.img_map
+        _cfgs = map_template.cfgs
+    except Exception as e:
+        # 处理可能出现的异常
+        print(f"加载{map_name}地图模板时发生错误: {e}")
 
 
 def find_cur_room(screen, confi=0.7):
@@ -183,13 +195,15 @@ def find_cur_room(screen, confi=0.7):
     """
     flag = False
     room = None
-    if isinstance(cfgs, list):
+    if _img_map is None or _cfgs is None:
+        load_map_template()
+    if isinstance(_cfgs, list):
         confidence = confi
-        for cfg in cfgs:
+        for cfg in _cfgs:
             # 识别区域
             crop = cfg['rect']
             img_name = cfg['img_name']
-            img = img_map[img_name]
+            img = _img_map[img_name]
             res = image_match_util.cvmatch_template_best(img, screen, crop)
             if res is not None:
                 # 取可信度最高的匹配结果
