@@ -52,7 +52,6 @@ def rect_slice_index(rect: Rect, size: Size, point: tuple) -> Tuple[int, int]:
     ：param point：要索引的坐标
     : return: 如 (4, 1) 则表示目标在切片索引的第 4 行，第 1 列
     """
-    rect = Rect(rect.x * zoom_ratio, rect.y * zoom_ratio, rect.w * zoom_ratio, rect.h * zoom_ratio)
     x1, y1, x2, y2 = rect.x, rect.y, rect.x + rect.w, rect.y + rect.h
     width = rect.w / size[0]
     height = rect.h / size[1]
@@ -74,7 +73,8 @@ def get_cur_room_index(point):
     : return: 如 (4, 1) 则表示目标在切片索引的第 4 行，第 1 列
     """
     # 锁定获取的范围和每个房间方块的大小
-    xy = rect_slice_index(Rect(850, 380, 635, 315), Size((6, 3)), point)
+    # Rect从投屏画面中获取区域左上角x,y和w，h
+    xy = rect_slice_index(Rect(504, 225, 376, 187), Size((6, 3)), point)
     # 遍历room_route
     cur_ind = None
 

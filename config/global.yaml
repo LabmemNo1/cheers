@@ -6,7 +6,7 @@
 device: 24ed1083
 
 # 当前的角色
-cur_role: axiulou
+cur_role: hongyan
 attack_distance: 600 # 攻击距离一般600够了
 
 # 支持的所有角色，配置对应的配置文件路径

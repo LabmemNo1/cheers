@@ -34,10 +34,21 @@ unique_skills:
   - skill_name: skill_r
   - skill_name: move
     param: [ 180, 0.01 ] # 移动的方法有两个参数：角度、移动时间，使用param
+    wait: 1
   - skill_name: skill_r
 
 # 房间技能配置
 room_skills:
+#  - - room_ij: [ 1, 1 ]
+#    - skill_name: skill_r
+#    - skill_name: move
+#      param: [ 265, 0.7 ] # 移动的方法有两个参数，使用param
+#    - skill_name: move
+#      param: [ 180, 0.01 ] # 移动的方法有两个参数：角度、移动时间，使用param
+#      wait: 0.5
+#    - skill_name: skill_r
+
+
   - - room_ij: [ 1, 0 ]
     - { skill_name: skill_1, time: 0.5, wait: 0.2 }
     - { skill_name: skill_3,wait: 1 }
@@ -80,9 +91,9 @@ room_skills:
 
   - - room_ij: [ 1, 5 ]
     - { skill_name: move, param: [ 0, 0.5 ]}
-    - { skill_name: skill_w, wait: 1 }
-    - { skill_name: skill_e, wait: 0.5 }
+    - { skill_name: skill_e, wait: 0.2 }
     - { skill_name: skill_d, time: 0.5 }
+    - { skill_name: skill_w, wait: 1 }
     - { skill_name: attack, time: 2 }
 
 
@@ -132,8 +143,6 @@ hurt_skills:
 
   - - { skill_name: skill_e, time: 0.5 }
 
-  - - skill_name: skill_t
-    - skill_name: skill_t
 
   - - { skill_name: skill_5 }
     - { skill_name: move, param: [ 180, 0.1]}

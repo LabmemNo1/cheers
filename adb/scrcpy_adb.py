@@ -43,7 +43,7 @@ class ScrcpyADB:
 
             s = time.time()
             result = self.yolo(screen)
-            print(f'匹配耗时{int((time.time() - s) * 1000)} ms')
+            # print(f'匹配耗时{int((time.time() - s) * 1000)} ms')
             self.draw_image(screen, result)
             self.result = result
             self.draw_screem = screen

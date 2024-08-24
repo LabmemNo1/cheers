@@ -264,7 +264,7 @@ class GameAction:
 
             time.sleep(0.1)
             move_door_cnt += 1
-            max_cnt = 50
+            max_cnt = 30
             if move_door_cnt > max_cnt:
                 move_door_cnt = 0
                 print(f'***************过门次数超过{max_cnt}次，随机移动一下*******************************')
@@ -667,6 +667,6 @@ if __name__ == '__main__':
     启动入口
     :author: Cheers。。
     """
-    run()
-    # test()
+    # run()
+    test()
 
