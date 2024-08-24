@@ -170,7 +170,7 @@ def get_tag_by_direction(direction):
 # 定义模块级别的变量
 _img_map = None
 _cfgs = None
-def load_map_template(map_name='布万加房间'):
+def load_map_template(map_name='bwj_room'):
     """
     加载布万加的地图模板
     :return:

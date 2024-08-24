@@ -87,7 +87,7 @@ class GameAction:
         self.yolo = self.ctrl.adb.yolo
         self.adb = self.ctrl.adb
         # todo 稳定后可根据配置加载不同地图
-        room_calutil.load_map_template('布万加房间')
+        room_calutil.load_map_template('bwj_room')
 
     def find_result(self):
         while True:
@@ -570,7 +570,7 @@ class GameAction:
             template_util = TemplateUtil()
             # 发现修理装备，就修理
             screen = self.ctrl.adb.last_screen
-            repair_res = template_util.find_template('修理装备',screen)
+            repair_res = template_util.find_template('repair_equipment',screen)
             if repair_res is not None:
                 print('发现修理装备按钮,点击修理装备')
                 # x, y, w, h = repair_res['rect']
@@ -583,7 +583,7 @@ class GameAction:
                 time.sleep(0.2)
 
             # 截取区域 xywh，在电脑用截图工具拿到
-            again_btn = template_util.find_template('再次挑战地下城',screen)
+            again_btn = template_util.find_template('re_enter',screen)
             if again_btn is None:
                 return
 

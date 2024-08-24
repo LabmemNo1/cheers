@@ -48,7 +48,7 @@ class ScrcpyADB:
             self.result = result
             self.draw_screem = screen
             if self.window_size == (0, 0):
-                self.window_size = sadb.last_screen.shape[1], sadb.last_screen.shape[0]
+                self.window_size = self.last_screen.shape[1], self.last_screen.shape[0]
 
     def draw_image(self, screen, result):
         if screen is None:
