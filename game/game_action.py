@@ -375,9 +375,9 @@ class GameAction:
         while True:
             screen, result = self.find_result()
 
-            # 判断误过图
-            if self.except_pass_map():
-                return result
+            # # 判断误过图
+            # if self.except_pass_map():
+            #     return result
 
             hero = self.find_tag(result, 'hero')
             if len(hero) == 0:
