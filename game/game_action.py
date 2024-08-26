@@ -278,7 +278,7 @@ class GameAction:
             ax, ay = get_detect_obj_right(min_distance_obj)
         # 装备标了名称，所以要加40，实际上在下方
         if self.yolo.class_names[int(min_distance_obj.label)] == 'equipment':
-            ay += 60
+            ay += 30
         self.craw_line(hx, hy, ax, ay, screen)
 
         angle = calc_angle(hx, hy, ax, ay)
