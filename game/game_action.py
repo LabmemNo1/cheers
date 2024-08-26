@@ -337,6 +337,31 @@ class GameAction:
             # print(f'~~~~~正在移动到{x},{y}...')
             self.adb.touch_move(x, y)
 
+
+    def except_pass_map(self):
+        """
+        是否异常的过图，捡装备不小心过图时，调用这个
+        :return:
+        """
+        ada_image = cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
+                                         cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3)
+        if np.sum(ada_image) <= 600000:
+            print('*******************************捡装备不小心过图了*******************************')
+            self.param.mov_start = False
+            self.adb.touch_end(0, 0)
+            while np.sum(cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
+                                              cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3)) >= 600000:
+                time.sleep(0.2)
+            flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+            cnt = 0
+            while not flag and cnt <= 10:
+                time.sleep(0.2)
+                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+                cnt += 1
+            self.param.cur_room = cur_room if flag else self.param.next_room
+            return True
+        return False
+
     def pick_up_equipment(self):
         """
         捡装备
@@ -351,17 +376,7 @@ class GameAction:
             screen, result = self.find_result()
 
             # 判断误过图
-            ada_image = cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
-                                             cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3)
-            if np.sum(ada_image) <= 600000:
-                print('*******************************捡装备不小心过图了*******************************')
-                self.param.mov_start = False
-                while np.sum(cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
-                                             cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3))>=600000:
-                    time.sleep(0.1)
-                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
-                self.param.cur_room = cur_room if flag else self.param.next_room
-                self.adb.touch_end(0, 0)
+            if self.except_pass_map():
                 return result
 
             hero = self.find_tag(result, 'hero')
@@ -620,6 +635,7 @@ class GameAction:
     def test(self):
         print(f'开始释放房间{self.param.cur_room}的固定技能。。。')
         self.attack.room_skill(self.param.cur_room)
+
 
 
 def run():
