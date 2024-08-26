@@ -201,8 +201,7 @@ class GameAction:
                     print('没有找到地图和当前房间')
                     return result
                 _, next_room = room_calutil.get_next_room(cur_room, self.param.is_succ_sztroom)
-                # if next_room is None:
-                #     next_room = room_calutil.get_recent_room(cur_room)
+
                 if next_room is None:
                     print('没有找到下一个房间')
                     return result
@@ -351,6 +350,20 @@ class GameAction:
         while True:
             screen, result = self.find_result()
 
+            # 判断误过图
+            ada_image = cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
+                                             cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3)
+            if np.sum(ada_image) <= 600000:
+                print('*******************************捡装备不小心过图了*******************************')
+                self.param.mov_start = False
+                while np.sum(cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
+                                             cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3))>=600000:
+                    time.sleep(0.1)
+                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+                self.param.cur_room = cur_room if flag else self.param.next_room
+                self.adb.touch_end(0, 0)
+                return result
+
             hero = self.find_tag(result, 'hero')
             if len(hero) == 0:
                 hero_no += 1
@@ -449,6 +462,7 @@ class GameAction:
                     attak_cnt += 1
                     # 狮子头房间放觉醒
                     self.attack.unique_skill()
+                    print('狮子头房间放觉醒完成释放')
                     continue
 
                 if distance <= attack_distance * ratio and y_dis <= 100*ratio:
