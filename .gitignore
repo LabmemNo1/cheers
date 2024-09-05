@@ -1,3 +1,5 @@
 .idea
 utils/images
 model/
+*.pyc
+test.py

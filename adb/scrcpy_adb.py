@@ -11,15 +11,16 @@ from utils.yolov5 import YoloV5s
 
 
 class ScrcpyADB:
-    def __init__(self, max_width=0, real_width=2336):
+    def __init__(self, max_width=0, real_width=2712):
         self.global_cfg = DnfConfig()
+        self.real_width = self.global_cfg.get_by_key('resolution')
         self.yolo = YoloV5s(target_size=640,
                             prob_threshold=0.25,
                             nms_threshold=0.45,
                             num_threads=4,
                             use_gpu=True)
         devices = adb.device_list()
-        client = scrcpy.Client(device=devices[0], max_width=max_width,max_fps=15)
+        client = scrcpy.Client(device=devices[0], max_width=max_width,max_fps=30)
         # You can also pass an ADBClient instance to it
         adb.connect(self.global_cfg.get_by_key('device'))
         print(devices, client)

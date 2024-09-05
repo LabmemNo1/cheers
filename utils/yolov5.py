@@ -67,7 +67,7 @@ class YoloV5s:
         prob_threshold=0.25,
         nms_threshold=0.45,
         num_threads=1,
-        use_gpu=False,
+        use_gpu=True,
     ):
         self.target_size = target_size
         self.prob_threshold = prob_threshold

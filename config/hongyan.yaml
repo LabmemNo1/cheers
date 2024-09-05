@@ -12,16 +12,16 @@ role_name: 红眼
 
 # buff技能配置,需要频繁释放的技能
 buff_skills:
-  - { skill_name: skill_q, wait: 0.1 }
-  - { skill_name: skill_down, wait: 0.1 }
+  # - { skill_name: skill_right, wait: 0.1 }
+  # - { skill_name: skill_down, wait: 0.1 }
 
 
 
 
 # 状态技能[只需要开启一次的技能]配置 红眼没有这种技能
 state_skills:
-#  - skill_name: skill_right
-# 使用默认持续时间，所以不需要time
+  - { skill_name: skill_right, wait: 0.3 }
+  - { skill_name: skill_down, wait: 0.1 }
 
 
 
@@ -54,52 +54,44 @@ room_skills:
 
   - - room_ij: [ 1, 0 ]
     - { skill_name: move, param: [ 0, 0.5 ]}
-    - { skill_name: skill_1, time: 0.5, wait: 0.5 }
-    - { skill_name: skill_3,wait: 1 }
+    - { skill_name: skill_f, time: 0.5, wait: 0.5 }
 
   - - room_ij: [ 2, 0 ]
     - { skill_name: move, param: [ 280, 0.5 ]}
     - { skill_name: move, param: [ 0, 0.1 ], wait: 0.2}
-    - { skill_name: skill_d, time: 1, wait: 0.2 }
+    - { skill_name: skill_w, time: 1, wait: 0.2 }
     - { skill_name: attack, time: 3 }
 
 
   - - room_ij: [ 2, 1 ]
     - { skill_name: move, param: [ 0, 0.5 ]}
-    - { skill_name: skill_w, wait: 0.2 }
-    - { skill_name: skill_f, wait: 1 }
+    - { skill_name: skill_q, wait: 0.2 }
     - { skill_name: attack, time: 3 }
 
   - - room_ij: [ 2, 2 ]
-    - { skill_name: move, param: [ 0, 0.5 ]}
     - { skill_name: skill_e, wait: 0.2 }
-    - { skill_name: skill_1, time: 0.5 }
-    - { skill_name: skill_2 }
 
   - - room_ij: [ 1, 2 ]
     - { skill_name: move, param: [ 90, 0.6 ]}
     - { skill_name: skill_f, wait: 1.5 }
-    - { skill_name: skill_3, wait: 1.5 }
-    - { skill_name: skill_w, time: 0.5 }
     - { skill_name: attack, time: 3 }
 
   - - room_ij: [ 1, 3 ]
-    - { skill_name: move, param: [ 0, 0.1 ]}
-    - skill_name: skill_5
-    - { skill_name: move, param: [ 180, 0.1 ]}
-    - { skill_name: skill_e, wait: 0.5 }
+    - { skill_name: move, param: [ 0, 0.3 ]}
+    - { skill_name: skill_w, wait: 0.5 }
     - { skill_name: attack, time: 2 }
 
   - - room_ij: [ 1, 4 ]
     - { skill_name: move, param: [ 340, 0.5 ]}
-    - { skill_name: skill_d, time: 1.5 }
+    - { skill_name: skill_f, time: 1.5 }
     - { skill_name: attack, time: 2 }
 
   - - room_ij: [ 1, 5 ]
     - { skill_name: move, param: [ 0, 0.5 ]}
-    - { skill_name: skill_e, wait: 0.2 }
+    - { skill_name: skill_q, wait: 0.2 }
     - { skill_name: skill_d, time: 0.5 }
-    - { skill_name: skill_w, wait: 1 }
+    - { skill_name: skill_1, wait: 1 }
+    - { skill_name: skill_2, wait: 1 }
     - { skill_name: attack, time: 2 }
 
 

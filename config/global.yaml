@@ -5,8 +5,10 @@
 #device: adb-24ed1083-yGX7n1._adb-tls-connect._tcp.
 device: 24ed1083
 
+resolution: 2712
+
 # 当前的角色
-cur_role: axiulou
+cur_role: daqiang
 attack_distance: 600 # 攻击距离一般600够了
 
 # 支持的所有角色，配置对应的配置文件路径
@@ -20,45 +22,32 @@ role_config:
   # 红眼
   - role_name: hongyan
     path: hongyan.yaml
+  # 大枪
+  - role_name: daqiang
+    path: daqiang.yaml
+  # 奶妈
+  - role_name: naima
+    path: naima.yaml
+
 
 
 # 技能与方向坐标点配置
 coordinates:
-  wheel_center: [460, 850] # 方向轮盘的中心点
-  wheel_radius: 125 # 方向轮盘的半径 比实际的半径要小一点
-  attack: [1962, 910] # 攻击按钮的坐标
-  skill_d: [1338, 975] # 底部左边两个技能 d f
-  skill_f: [1495, 973]
-  skill_1: [1645, 969] # 按照王者的技能顺序 1 2 3 4 5
-  skill_2: [1695, 810]
-  skill_3: [1825, 672]
-  skill_4: [1988, 640]
-  skill_5: [1982, 488]
-  skill_t: [1792, 985] # 后跳技能
-  skill_y: [2018, 780] # 原地跳技能
-  skill_q: [1665, 348] # 上方4个技能 q w e r
-  skill_w: [1774, 348]
-  skill_e: [1870, 348]
-  skill_r: [1979, 348]
-  skill_swip_center: [1812, 518] # 滑动技能的中心点
-
-
-# 横向版的技能配置
-#coordinates:
-#  wheel_center: [460, 850] # 方向轮盘的中心点
-#  wheel_radius: 125 # 方向轮盘的半径 比实际的半径要小一点
-#  attack: [1945, 955] # 攻击按钮的坐标
-#  skill_d: [1416, 840] # 底部左边两个技能 d f
-#  skill_f: [1345, 961]
-#  skill_1: [1645, 963] # 按照王者的技能顺序 1 2 3 4 5
-#  skill_2: [1715, 840]
-#  skill_3: [1861, 840]
-#  skill_4: [1566, 840]
-#  skill_5: [1500, 970]
-#  skill_t: [1792, 959] # 后跳技能
-#  skill_y: [2026, 836] # 原地跳技能
-#  skill_q: [818, 962] # 上方4个技能 q w e r
-#  skill_w: [928, 959]
-#  skill_e: [1035, 958]
-#  skill_r: [1145, 961]
-#  skill_swip_center: [1950, 713] # 滑动技能的中心点
+  map: [2548, 148] # 小地图坐标
+  wheel_center: [369, 883] # 方向轮盘的中心点
+  wheel_radius: 155 # 方向轮盘的半径 比实际的半径要小一点
+  attack: [2444, 1085] # 攻击按钮的坐标
+  skill_d: [1765, 1095] # 底部左边两个技能 d f
+  skill_f: [1935, 1095]
+  skill_1: [2110, 1090] # 按照王者的技能顺序 1 2 3 4 5
+  skill_2: [1842, 961]
+  skill_3: [2013, 960]
+  skill_4: [2183, 959]
+  skill_5: [2360, 965]
+  skill_t: [2276, 1091] # 后跳技能
+  skill_y: [2542, 963] # 原地跳技能
+  skill_q: [1172, 1093] # 上方4个技能 q w e r
+  skill_w: [1297, 1093]
+  skill_e: [1419, 1093]
+  skill_r: [1542, 1093]
+  skill_swip_center: [2450, 816] # 滑动技能的中心点

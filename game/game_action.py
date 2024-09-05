@@ -126,7 +126,8 @@ class GameAction:
         result = None
         fail_cnt = 0
         while True:
-            self.ctrl.click(2105, 128)
+            mapCoordinates = self.adb.global_cfg.get_by_key('coordinates', 'map')
+            self.ctrl.click(mapCoordinates[0], mapCoordinates[1])
             time.sleep(0.5)
             # screen = self.ctrl.adb.last_screen
             # if screen is None:
@@ -150,7 +151,7 @@ class GameAction:
             _, result2 = self.find_result()
             tmp = self.find_one_tag(result2, 'map')
             if tmp is not None:
-                self.ctrl.click(2105, 128)
+                self.ctrl.click(mapCoordinates[0], mapCoordinates[1])
             point = self.find_one_tag(result, 'point')
             if point is None:
                 return None, None, None
@@ -194,7 +195,7 @@ class GameAction:
             # 1 先确定要行走的方向
             if direction is None:
                 # route_id, cur_room, point = self.get_cur_room_index()
-                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen, self.adb.zoom_ratio)
                 if flag is False:
                     route_id, cur_room, point = self.get_cur_room_index()
                 if cur_room is None:
@@ -352,11 +353,11 @@ class GameAction:
             while np.sum(cv.adaptiveThreshold(cv.cvtColor(self.ctrl.adb.last_screen, cv.COLOR_BGR2GRAY), 255,
                                               cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY_INV, 13, 3)) >= 600000:
                 time.sleep(0.2)
-            flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+            flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen,  self.adb.zoom_ratio)
             cnt = 0
             while not flag and cnt <= 10:
                 time.sleep(0.2)
-                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen)
+                flag, cur_room = room_calutil.find_cur_room(self.adb.last_screen,  self.adb.zoom_ratio)
                 cnt += 1
             self.param.cur_room = cur_room if flag else self.param.next_room
             return True
@@ -591,6 +592,7 @@ class GameAction:
 
     def again(self):
         try:
+            print("again函数执行，当前房间为"+str(self.param.cur_room))
             if self.param.cur_room != (1, 5) and self.param.cur_room != (1, 4):
                 return
             screen, result = self.find_result()
@@ -601,30 +603,34 @@ class GameAction:
             template_util = TemplateUtil()
             # 发现修理装备，就修理
             screen = self.ctrl.adb.last_screen
-            repair_res = template_util.find_template('repair_equipment',screen)
+            repair_res = template_util.find_template('repair_equipment', screen, self.adb.zoom_ratio)
             if repair_res is not None:
                 print('发现修理装备按钮,点击修理装备')
-                # x, y, w, h = repair_res['rect']
                 self.ctrl.click(repair_res[0] / self.ctrl.adb.zoom_ratio, repair_res[1] / self.ctrl.adb.zoom_ratio)
-                time.sleep(0.8)
+                time.sleep(0.5)
                 # 点击修理
-                self.ctrl.click(1056, 950)
-                time.sleep(0.8)
-                self.ctrl.click(repair_res[0] / self.ctrl.adb.zoom_ratio, repair_res[1] / self.ctrl.adb.zoom_ratio)
-                time.sleep(0.2)
+                self.ctrl.click(674 / self.ctrl.adb.zoom_ratio, 555 / self.ctrl.adb.zoom_ratio)
+                time.sleep(0.9)
+
 
             # 截取区域 xywh，在电脑用截图工具拿到
-            again_btn = template_util.find_template('re_enter',screen)
-            if again_btn is None:
+            again_btn = template_util.find_template('re_enter', screen, self.adb.zoom_ratio)
+            if again_btn is None: 
+                print("没找到再次挑战按钮")
                 return
 
             # 发现了再次挑战，就重开
             print('发现再次挑战按钮,点击重开')
-            # x, y, w, h = result['rect'] #{'confidence': 0.748958170413971, 'rect': (1129, 129, 128, 24)}
             self.ctrl.click(again_btn[0] / self.ctrl.adb.zoom_ratio, again_btn[1] / self.ctrl.adb.zoom_ratio)
+
             print('成功点击再次挑战按钮')
             time.sleep(0.8)
-            self.ctrl.click(1304, 691)
+            # 这里的586和344是基于1384宽度下，2712x1220分辨率的不再提示300PL坐标
+            self.ctrl.click(586 / self.ctrl.adb.zoom_ratio, 344 / self.ctrl.adb.zoom_ratio)
+            time.sleep(1.5)
+            # 同理，不再提示打钩之后点击确定
+            self.ctrl.click(770 / self.ctrl.adb.zoom_ratio, 423 / self.ctrl.adb.zoom_ratio)
+
             # 初始化参数
             self.param = GameParamVO()
 
@@ -679,7 +685,7 @@ def test():
             action.find_result()
             print('--------------------------------test start--------------------------------')
             cv.imwrite('../test.jpg', action.adb.last_screen)
-            res = room_calutil.find_cur_room(action.adb.last_screen)
+            res = room_calutil.find_cur_room(action.adb.last_screen,  action.adb.zoom_ratio)
             action.param.cur_room = res[1]
             action.test()
 

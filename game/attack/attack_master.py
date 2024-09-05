@@ -134,8 +134,8 @@ class AttackMaster():
             try:
                 skill_name = get_by_key(skill, 'skill_name')
                 # 技能还在冷却，则跳过
-                if if_vaild and not self.is_ready(skill_name,last_screen):
-                    continue
+                # if if_vaild and not self.is_ready(skill_name,last_screen):
+                #     continue
                 # 释放技能
                 skill_method = getattr(self.ctrl, skill_name)
                 time = get_by_key(skill, 'time')

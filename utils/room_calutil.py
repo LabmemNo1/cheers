@@ -185,11 +185,11 @@ def load_map_template(map_name='bwj_room'):
         # 处理可能出现的异常
         print(f"加载{map_name}地图模板时发生错误: {e}")
 
-
-def find_cur_room(screen, confi=0.7):
+def find_cur_room(screen, zoom_ratio, confi=0.7):
     """
     根据小地图特征找当前房间
     :param screen: 当前帧
+    :param zoom_ratio: 投屏分辨率/手机实际分辨率
     :param confi: 默认最小置信度
     :return: flag 是否匹配成功, room
     """
@@ -201,7 +201,7 @@ def find_cur_room(screen, confi=0.7):
         confidence = confi
         for cfg in _cfgs:
             # 识别区域
-            crop = cfg['rect']
+            crop = [int(i * zoom_ratio) for i in cfg['rect']]
             img_name = cfg['img_name']
             img = _img_map[img_name]
             res = image_match_util.cvmatch_template_best(img, screen, crop)

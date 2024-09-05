@@ -1,5 +1,5 @@
 {
-    "rect": [2292, 137, 270, 173],
-    "img_name": "again_button.png", 
+    "width": 2712,
+    "map_coordinates": [1,2], 
     "desc": "点击重新开始，rect为x,y,w,h，可以通过截图工具得到，这个参数根据投屏的画面决定"
 }

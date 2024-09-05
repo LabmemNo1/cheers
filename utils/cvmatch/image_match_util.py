@@ -563,6 +563,9 @@ def cvmatch_template_best(im_search, im_source, *crop):
             x, y, w, h = crop[0]
         # 截剪im_source
         im_source = im_source[y:y + h, x:x + w]
+        # cv2.imshow("img2", im_source)
+        # cv2.imshow("img3", im_search)
+
 
         if im_source.shape[0] < m_h or im_source.shape[1] < m_w:
             print('模板大小大于原图')
@@ -574,6 +577,7 @@ def cvmatch_template_best(im_search, im_source, *crop):
         # 获取当前匹配结果中的最大值及其位置
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
         if max_val < 0.5:
+            print("比对失败")
             return None
 
         rx, ry, rw, rh = max_loc[0] + x, max_loc[1] + y, m_w, m_h

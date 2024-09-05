@@ -1,1 +1,1 @@
-{"rect": [1119, 200, 200, 150], "img_name": "repair_equipment.jpg", "desc": "点击修理装备，rect为x,y,w,h，可以通过截图工具得到，这个参数根据投屏的画面决定"}
+{"rect": [2352, 361, 200, 300], "img_name": "repair_equipment.png", "desc": "点击修理装备，rect为x,y,w,h，可以通过截图工具得到，这个参数根据投屏的画面决定"}
