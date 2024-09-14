@@ -611,6 +611,8 @@ class GameAction:
                 # 点击修理
                 self.ctrl.click(674 / self.ctrl.adb.zoom_ratio, 555 / self.ctrl.adb.zoom_ratio)
                 time.sleep(0.9)
+                self.ctrl.click(repair_res[0] / self.ctrl.adb.zoom_ratio, repair_res[1] / self.ctrl.adb.zoom_ratio)
+                time.sleep(0.9)
 
 
             # 截取区域 xywh，在电脑用截图工具拿到
